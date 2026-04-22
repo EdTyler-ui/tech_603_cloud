@@ -14,5 +14,5 @@
 - t3.micro: size and power of machine, cheap and free, perfect for learning and testing small projects
 - select your key public pair: no password shareed over internet, much ahrder to hack
 - use the tech603 security and allow ssh traffic and http traffic
-- Launch instance
+- create instance
 - delete instance when done
