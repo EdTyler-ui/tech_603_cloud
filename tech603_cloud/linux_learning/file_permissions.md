@@ -57,3 +57,23 @@
   - chmod g-w testfile.txt
 - user:rw, group:r, other:none
   - chmod 640 testfile.txt
+
+## managing file ownership
+
+### why is it important
+- crucial for linux security
+- prevents unauthorised access from unwanted people
+- prevents malicious changes to files
+
+### command to see file ownership
+- ls -l
+
+### what permissions are set when users create a file or directory
+- it belongs to that user who creates it and the primary group
+
+### why do owners not recieve x by default?
+- most files are txt that dont need to be run
+- might accidentally execute a file that contains malicious code
+
+### how to change ownership of file/ directory
+- chown new_owner filename

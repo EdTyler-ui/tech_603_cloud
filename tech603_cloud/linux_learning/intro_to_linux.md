@@ -17,10 +17,10 @@
     - [accessing folders in root](#accessing-folders-in-root)
     - [observe environment and edit](#observe-environment-and-edit)
     - [how to add env persistently](#how-to-add-env-persistently)
-  - [Process command](#process-command)
-  - [real- time system monitor](#real--time-system-monitor)
-  - [Managing system processes](#managing-system-processes)
-  - [killing a process](#killing-a-process)
+    - [Process command](#process-command)
+    - [real- time system monitor](#real--time-system-monitor)
+    - [Managing system processes](#managing-system-processes)
+    - [killing a process](#killing-a-process)
 
 <br>
 
@@ -74,15 +74,15 @@
 ## linux commands
 
 ### information about current session
-- uname -a: display info of current OS
-- whoami: what is running
-- ps -p $$: shows if youre running on bash
-- histroy: shows commands ran ('-c' to clear)
+- 'uname -a' : display info of current OS
+- 'whoami' : what is running
+- 'ps -p $$' : shows if youre running on bash
+- 'histroy' : shows commands ran ('-c' to clear)
 
 ### moving around folders
-- ls: shows files/ folders
-  - ls -a: shows hidden files/folders
-  - ls -la: shows hidden files/folders and permissions
+- 'ls': shows files/ folders
+  - 'ls -a': shows hidden files/folders
+  - 'ls -la' : shows hidden files/folders and permissions
 - cd: change directory ('cd .' is current directory and 'cd ..' is home directory)
 - pwd: where you are in folders
 
@@ -111,7 +111,7 @@
 - cat filename | grep word/phrase: finds a word or phrase in a file
 
 ### installing tree
-- sudp apt update: just checks what packages need updating 
+- sudo apt update: just checks what packages need updating 
 - sudo apt install tree: 
 - tree: shows folder organisation 
 - sudo apt upgrade: would not run on an untested environment DANGEROUS CODE. changing version to latest package not compatible with older stuff
@@ -138,7 +138,7 @@
 - source .bashrc: reload certain configuration files
 - printenv variable should now present the new environment
 
-## Process command
+### Process command
 - ps: shows prcoesses running in current terminal, static snapshot
 - format = process ID, terminal, CPU time used, command
 - ps -A: shows all processes in a system, background and other users ps
@@ -146,7 +146,7 @@
 - ps aux: processes for all users, user-oriented format and includes processes without a terminal
     - Tells you CPU usage, memory and virtual, process state, start time and CPU time
 
-## real- time system monitor
+### real- time system monitor
 
 - shows the continuous update of info on running process
 - top: showsl ive dashboard of cpu usage, memory, number of processes, system uptime
@@ -156,18 +156,18 @@
     - shift + n: sort by newest processes
 - htop: better visualisation version of top, shows colour coded bars for CPU, RAM. Easy process management and kill certain processes
 
-## Managing system processes
+### Managing system processes
 - sleep 3: put delay between each command for 3 seconds
 - sleep 5000 &: runs process in background, gives process id as output
 - jobs: see processes running in background
   - jobs -l: shows process ID
 - control c to break out of processes engaged in terminal
 
-## killing a process
+### killing a process
 - kill -1 processid: gentle way to remove process
   - shuts down child process first before parent process
 - kill -15 processid: standard level of kill (uses when u dont specifty a number)
   - shut down child process first
-- kill -9 processid: brute force kill
+- kill -9 processid: brute force kill DANGEROUS CODE
   - shuts down parent process so child processes continue running (zombie processes)
-- PM2 used to recreate a new process the get running after killing it
+- PM2 used to recreate a new process after killing it, provides contiuous back up so app crashing does not cause a hault 
