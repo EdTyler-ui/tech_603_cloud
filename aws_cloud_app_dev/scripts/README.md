@@ -5,15 +5,45 @@
 
 - 'sudo apt-get update' : refreshes the list of available packages and there versions. 
 - 'sudo apt-get upgrade -y' : updates all packages to there latest versions, -y automatically says yes if prompted
-- 
 
-## running app in the background
+## nginx
+- what is it
+  - it is a high performance web server and reverse proxy
+  - load balancing traffic and caching
+- useful commands
+  - 'sudo apt install nginx -y' : install nginx
+  - 'sudo apt enable nginx' : enables nginx to run when vm is rebooted (usually default)
+  - 'sudo systemctl restart nginx' : best for when config files have been altered 
+  - 'sudo systemctl status nginx' : see the status of nginx
+  
 
-## running app using pm2
-- what is pm2?
-- 
+## node.js
+- what is it
+  - allows users to use javascript to write command line tools locally not in web browser
+- useful commands
+  - 'curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -' : node version manager, lets you change nodes
+  - 'sudo apt-get install -y nodejs' : installs node.js
+  - 'npm install' : installs packages
+  - 'npm start' : runs the package
+  - 'npm start &' : runs package in background
+
+## using git on a vm
+- 'sudo apt install git -y' : install git to use git commands 
+- 'git clone git_repo.git' : clones repo to vm 
+- cd tech603-sparta-app/'nodejs20-sparta-tictactoe-v1 (1)'/app : moves into the app folder in the repo
+
+## pm2
+- what is it
+  - runs node.js apps in the background and restarts if the app crashes
+  - lets you use terminal whilst app is runnig
+- useful commands
+  - 'sudo npm install -g pm2' : installs pm2 globally so it can be used in any folder
+  - 'pm2 status' : see if the app is running
+  - 'pm2 start npm --name "ttt-app" -- start' : starts the app and names it
+  - 'pm2 delete app_name' : deletes the app
 
 ## creating a reverse proxy
+- [app_rp_pm2.sh](app_rp_pm2.sh) 
 - what is a reverse proxy?
   - app runs on port 3000, nginx runs on 80, nginx redirects to port 3000, security group is separate entity
   - infront of app and forwards incoming requests
@@ -31,6 +61,7 @@
         - '-i' : saves the changes to the file
         - substitute| text to replace | text to replace with
         - end with the file path being changed
+    - 'sudo systemctl restart nginx' to restart nginx to apply new configs
 
 ## running app using userdata 
 - what is userdata?
@@ -41,8 +72,10 @@
   - go to advanced details
   - paste your script into the userdata block. DO NOT EDIT THE SCRIPT IN THIS BLOCK
   - launch instance and move to root user to view repo
+    - sudo su
 
 ## running app using custom app image and a bit of user data
+- user data = [run_app_only.sh](run_app_only.sh)
 - what is an image?
   - a snapshot that includes
     - an operating system
@@ -72,13 +105,59 @@
     - root@public_id to ubuntu@public_id
 - terminate vm that you got the snapshot from if no longer needed
 
-## pm2 codes to rememver
-- pm2 start --name
-- pm2 stop my-app
-- pm2 delete my-app
-- pm2 status
-- pm2 save
+## loading mongoDB into your vm
+- [prov_app.sh](prov_app.sh)
+- what is mongoDb?
+  - database used to store and manage data
+  - flexible, scalable and developer friendly
+  - stores in json like files, nosql involved
+- how to launch?
+  - launch instance
+  - select usual settings (ubuntu, key, appropriate name)
+  - edit security configurations so ssh is on my ip (better security) and add port 27017
+  - provide relevantname secuirty group
+- what to do once in vm terminal?
+  - UPDATE AND UPGRADE
+  - 'curl -fsSL https://pgp.mongodb.com/server-8.0.asc | \sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \ --dearmor' 
+      - 'curl fsSL' : verifys that packages from MongoDB are not tampered with
+      - 'sudo gpg' : gpg is an encryption tool
+      - --dearmor: converts from ASCII to binary
+    - create the mongodDB list file, makes a mongdb repo in a file
+      - 'echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list'
+    - sudo get-apt update to see new libraries available
+  - install mongodb
+    - 'sudo apt-get install -y mongodb-org=8.2.5 mongodb-org-database=8.2.5 mongodb-org-server=8.2.5 mongodb-mongosh mongodb-org-mongos=8.2.5 mongodb-org-tools=8.2.5'
+  - change the configuration to 0.0.0.0
+    - sudo sed -i 's/^ *bindIp: .*/  bindIp: 0.0.0.0/' /etc/mongod.conf
+  - start the mongodb
+    - sudo systemctl start mongod
+  - enable mongodb to start on reboot
+    - sudo systemctl enable mongod
+  - sudo systemctl status mongod
+    - displays enabled and running if mongodb is sucessfully installed
 
+- What to run in the app vm?
+  - need a env variable to link the mongoDB with our app vm
+    - export MONGODB_URI=mongodb://private-ip:27017/tictactoe
+    - :27017 is the mongodb port
+    - private ip of the mongodb vm
+
+
+## monolith vs 2-tier architecture
+
+- monolith:
+  - one machine and three layers that interact with each other
+    - contains user interface 
+    - business logic
+    - data access layer, interacts with the database
+  - pros: simple, lightweight, simpler to deploy (one set of code)
+  - cons: single point of failure, not scalable, becomes complex, have to update everything at once
+- 2-tier architecture:
+  - splits into two layers, two different machines
+    - client
+    - database
+  - pros: solves most disadavantages of monolith
+  - cons: more complex, database exposed, tight coupling
 
 ## why use?
 - no port numbers in url
@@ -86,14 +165,6 @@
 - run multiple apps
 - so you dont have to type in 3000
 
-
-## using userdata + pros and cons
-
-# Runbook for tic tac toe sparta app
-
-## manual deployment
-
-## deployment with bash scripts
 
 ## what to expect when running user data on a app VM
 - an error if theres nothing to connect to

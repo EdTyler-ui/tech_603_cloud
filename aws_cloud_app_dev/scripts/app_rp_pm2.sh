@@ -50,10 +50,12 @@ echo
 echo installing pm2
 sudo npm install -g pm2
 echo
+# comment this out if you do not need to connect to database
+export MONGODB_URI=mongodb://172.31.18.164:27017/tictactoe
 
 # installing app and pm2
 echo installing app
 npm install
 echo starting app, run in background
-sudo pm2 start npm --name "ttt-app" -- start
+pm2 start npm --name "ttt-app" -- start
 
