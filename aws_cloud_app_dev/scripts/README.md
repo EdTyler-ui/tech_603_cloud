@@ -1,3 +1,19 @@
+- [running an app in aws](#running-an-app-in-aws)
+  - [getting started](#getting-started)
+  - [nginx](#nginx)
+  - [node.js](#nodejs)
+  - [using git on a vm](#using-git-on-a-vm)
+  - [pm2](#pm2)
+  - [creating a reverse proxy](#creating-a-reverse-proxy)
+  - [running app using userdata](#running-app-using-userdata)
+  - [running app using custom app image and a bit of user data](#running-app-using-custom-app-image-and-a-bit-of-user-data)
+  - [loading mongoDB into your vm](#loading-mongodb-into-your-vm)
+  - [monolith vs 2-tier architecture](#monolith-vs-2-tier-architecture)
+  - [why use?](#why-use)
+  - [what to expect when running user data on a app VM](#what-to-expect-when-running-user-data-on-a-app-vm)
+  - [developing higher levels of automation with app deployment on vms](#developing-higher-levels-of-automation-with-app-deployment-on-vms)
+
+
 # running an app in aws
 
 ## getting started
@@ -172,7 +188,7 @@
 - 502 error: bad gateway
 - app display
 
-# developing higher levels of automation with app deployment on vms
+## developing higher levels of automation with app deployment on vms
 - lowest level of automation + slowest way to run app
   - stage 1: manual deployment, ssh in first
 - low level of automation + slow way to run app
@@ -182,3 +198,5 @@
 - high level of automation + fast speed to run app
   - using image and a little bit of user data, image is a selection of files and folders used to run the app
   - make copy of your vm so you can use in the future
+
+

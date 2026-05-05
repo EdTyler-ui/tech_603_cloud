@@ -36,13 +36,14 @@ sudo apt install git -y
 
 # cloning repo
 echo cloning repo
+cd /home/ubuntu
 git clone https://github.com/EdTyler-ui/tech603-sparta-app.git 
 echo done
 echo
 
 # change into app folder
 echo moving to app folder
-cd tech603-sparta-app/'nodejs20-sparta-tictactoe-v1 (1)'/app
+cd /home/ubuntu/tech603-sparta-app/nodejs20-sparta-tictactoe/app
 echo done
 echo
 
@@ -51,11 +52,12 @@ echo installing pm2
 sudo npm install -g pm2
 echo
 # comment this out if you do not need to connect to database
-export MONGODB_URI=mongodb://172.31.18.164:27017/tictactoe
 
+echo stop exisiting app if running
+pm2 delete sparta-app
 # installing app and pm2
 echo installing app
 npm install
 echo starting app, run in background
-pm2 start npm --name "ttt-app" -- start
+pm2 start npm --name sparta-app -- start
 
