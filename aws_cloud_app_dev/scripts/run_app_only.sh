@@ -7,7 +7,11 @@ cd repo
 
 cd tech603-sparta-app/app
 
+export MONGODB_URI=mongodb://172.31.24.17:27017/tictactoe
 
-echo "Starting application with PM2..."
-pm2 start npm --name sparta-app -- start
+node seeds/seed.js
+
+npm install
+
+pm2 start index.js
 
