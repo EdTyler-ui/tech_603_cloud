@@ -30,6 +30,8 @@
   - [step 4: **create route table**](#step-4-create-route-table)
   - [step 5: **launch db instance with vpc security configurations**](#step-5-launch-db-instance-with-vpc-security-configurations)
   - [step 6: **launch app instance with vpc security configurations**](#step-6-launch-app-instance-with-vpc-security-configurations)
+  - [using app vm as a jumpbox into the database vm](#using-app-vm-as-a-jumpbox-into-the-database-vm)
+  - [improving database security without using a vpc](#improving-database-security-without-using-a-vpc)
 
 
 ## what is better than monitoring?
@@ -292,9 +294,45 @@ Private Subnet → App Server / Database (no public access)
 ![alt text](images/sec-conf-app.png)
 
 
-
   - userdata: [userdata](run_app_only.sh)
     - CHANGE THE PRIVATE IP IN EXPORT COMMAND TO MONGODB INSTANCE PRIVATE IP
+
+| Component | What it is | Simple analogy |
+|---|---|---|
+| **VPC** | Your own private, isolated network in the cloud | A fenced-off plot of land |
+| **Subnet** | A smaller section of your VPC, tied to a specific zone | A building on that land |
+| **Internet Gateway** | The door that lets your VPC talk to the internet | The front gate to the outside world |
+| **Route Table** | Rules that decide where network traffic gets sent | Road signs directing traffic |
+
+### using app vm as a jumpbox into the database vm
+1. **creating the database vm**
+   - change security group so you can access ssh with your app vms ip
+     - or just use from everywhere
+2. **moving the key into the app vm**
+   - use the scp command to transfer your private key
+   - transfer from ssh folder to app vm home directory
+3. **jumpbox**
+   - now ssh from the app vm to the db vm
+   - using the ssh for the db (public ip, change root to ubuntu)
+
+### improving database security without using a vpc
+1. remove the public ip from the database vm
+  - disable the public IPv4 address on the database instance
+  - database is not accessible from the internet
+- how to disable IPv4:
+  - Remove public ip:
+   1. Go to db instance page summary page.
+   2. Click Networking -> Networking interface .
+   3. Click Actions.
+   4. Click Manage IP addresses.
+   5. Click eth0.
+   6. Toggle off Auto-assign public IP.
+   7. Save.
+2. restricted database access via security groups
+  - source set of ssh and mongodb to the App VMs security group
+  - only the app vm can access the database (principle of least privilege)
+
+
 
 
 
