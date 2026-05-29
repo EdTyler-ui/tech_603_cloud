@@ -12,6 +12,10 @@
   - [why use?](#why-use)
   - [what to expect when running user data on a app VM](#what-to-expect-when-running-user-data-on-a-app-vm)
   - [developing higher levels of automation with app deployment on vms](#developing-higher-levels-of-automation-with-app-deployment-on-vms)
+  - [using azure to run the app](#using-azure-to-run-the-app)
+    - [setting up ssh azure key](#setting-up-ssh-azure-key)
+    - [set up a VNet](#set-up-a-vnet)
+    - [start an instance on azure](#start-an-instance-on-azure)
 
 
 # running an app in aws
@@ -200,3 +204,57 @@
   - make copy of your vm so you can use in the future
 
 
+## using azure to run the app
+log into azure using the credentials provided
+
+### setting up ssh azure key
+- click keys -> create 
+- resource group -> tech603
+- key pair name -> 'tech603-edward-azure-key'
+- click review and create
+![create azure ssh key](images/generate_azure_key.png)
+
+### set up a VNet
+- basics tab
+  - search virtual networks -> click create
+  - resource group -> tech603
+  - virtual network name -> 'tech603-edward-2-subnet-vnet'
+  - region -> 'UK south'
+- address space
+  - click 'add subnet'
+    - name -> 'public subnet'
+    - IPv4 -> 10.0.2.0/24
+    - disable private subnet
+  - click 'add subnet'
+    - name -> 'private subnet'
+    - IPv4 -> 10.0.3.0/24
+    - disable private subnet
+  - give tag owner / edward
+
+### start an instance on azure
+-  click create in virtual machine
+-  in basics tab
+   -  image name -> 'Ubuntu Server 24.04 LTS - x64 Gen2'
+   -  resource group -> tech603
+   -  vm name -> 'tech603-edward-app'
+   -  region -> 'uk south'
+   -  security type -> standard
+   -  size -> 'standard B1'
+   -  username -> 'adminuser'
+   -  SSH public key source -> 'use existing key stored in azure'
+
+![security group app](images/sg_azure_app.png)
+- dont allow port 80 for db instance
+
+- in disks tab
+  - change from premium SSD to standard SSD 
+- in networking tab
+  - virtual network -> 'tech603-edward-2-subnet-vnet'
+  - public subnet for app vm, private subnet for db vm
+- advanced tab
+  - enable user data
+  - input app or db userdata
+    - [db user data](prov_app.sh)
+- tag tab
+  - tag with owner and edward
+- create and deploy
